@@ -2,14 +2,14 @@
 import { useState } from 'react';
 
 export default function Home() {
-  // State管理
+  // useStateを使った値（状態）管理
   const [getMessage, setGetMessage] = useState('');
   const [multiplyNumber, setMultiplyNumber] = useState('');
   const [multiplyResult, setMultiplyResult] = useState('');
   const [postMessage, setPostMessage] = useState('');
   const [postResult, setPostResult] = useState('');
 
-  // API処理
+  // FastAPIのエンドポイント設定
   const handleGetRequest = async () => {
     try {
       const response = await fetch('http://localhost:8000/api/hello');
@@ -46,6 +46,7 @@ export default function Home() {
     }
   };
 
+  // ユーザーインターフェースの構築
   return (
     <div className="p-8">
       <h1 className="text-2xl font-bold mb-6">Next.jsとFastAPIの連携アプリ</h1>

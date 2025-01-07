@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
-# CORSの設定
+# CORSの設定 フロントエンドからの接続を許可する部分
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000"],
@@ -13,7 +13,7 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-# POSTリクエストのボディ用モデル
+# データのスキーマを定義するためのクラス
 class EchoMessage(BaseModel):
     message: str | None = None
 
