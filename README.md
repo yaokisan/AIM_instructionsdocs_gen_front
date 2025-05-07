@@ -26,4 +26,4 @@ npm install
 npm run dev
 
 ## 立ち上げ
-http://localhost:3000/customers にアクセス
+http://localhost:3000/ にアクセス
