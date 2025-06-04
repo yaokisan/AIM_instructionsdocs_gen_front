@@ -4,9 +4,25 @@ import { useState } from 'react';
 export default function Home() {
   // Google連携ワークフロー用の状態変数のみ残す
   const [numberOfCopies, setNumberOfCopies] = useState(1); // デフォルト値を1に設定
+  const [inputValue, setInputValue] = useState(numberOfCopies.toString());
   const [workflowIsLoading, setWorkflowIsLoading] = useState(false);
   const [workflowResults, setWorkflowResults] = useState(null);
   const [workflowError, setWorkflowError] = useState('');
+
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleInputBlur = () => {
+    const numericValue = parseInt(inputValue, 10);
+    if (!isNaN(numericValue) && numericValue >= 1) {
+      setNumberOfCopies(numericValue);
+      setInputValue(numericValue.toString());
+    } else {
+      setNumberOfCopies(1);
+      setInputValue("1");
+    }
+  };
 
   // Google連携ワークフロー実行関数
   const handleExecuteWorkflow = async () => {
@@ -63,12 +79,10 @@ export default function Home() {
               </label>
               <input
                 id="numberOfCopies"
-                type="number" // type="number" を維持
-                value={numberOfCopies}
-                onChange={(e) => {
-                  const value = parseInt(e.target.value, 10);
-                  setNumberOfCopies(isNaN(value) || value < 1 ? 1 : value);
-                }}
+                type="number"
+                value={inputValue}
+                onChange={handleInputChange}
+                onBlur={handleInputBlur}
                 min="1"
                 inputMode="numeric" 
                 pattern="[0-9]*"  
