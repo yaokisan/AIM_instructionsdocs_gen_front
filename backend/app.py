@@ -17,10 +17,14 @@ from google_services import (
 
 app = FastAPI()
 
-# CORSの設定 フロントエンドからの接続を許可する部分
+origins = [
+    "http://localhost:3000",
+    "https://aim-instructionsdocs-gen-lwqr.vercel.app",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
