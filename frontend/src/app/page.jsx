@@ -54,20 +54,30 @@ export default function Home() {
       <main> {/* メインコンテンツセクション */} 
         <section className="bg-white shadow-md rounded-lg p-6">
           <div className="space-y-4">
-            <div className="flex flex-col sm:flex-row items-center gap-3">
-              <label htmlFor="numberOfCopies" className="whitespace-nowrap font-medium text-gray-700">ドキュメント複製数:</label>
+            <div className="flex flex-col items-stretch gap-3 p-4 bg-gray-50 rounded-lg shadow"> {/* 親要素: スマホ・PC問わず縦積み、子要素は幅いっぱい */}
+              <label
+                htmlFor="numberOfCopies"
+                className="font-medium text-gray-700 text-left text-sm sm:text-base" /* ラベルは左寄せ、フォントサイズ調整 */
+              >
+                ドキュメント複製数:
+              </label>
               <input
                 id="numberOfCopies"
-                type="number"
+                type="number" // type="number" を維持
                 value={numberOfCopies}
-                onChange={(e) => setNumberOfCopies(e.target.valueAsNumber >= 1 ? e.target.valueAsNumber : 1)} 
+                onChange={(e) => {
+                  const value = parseInt(e.target.value, 10);
+                  setNumberOfCopies(isNaN(value) || value < 1 ? 1 : value);
+                }}
                 min="1"
-                className="border border-gray-300 rounded px-3 py-2 w-full sm:w-28 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition duration-150"
+                inputMode="numeric" 
+                pattern="[0-9]*"  
+                className="border border-gray-300 rounded px-3 py-3 text-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition duration-150 w-full appearance-textfield" 
               />
               <button
                 onClick={handleExecuteWorkflow}
                 disabled={workflowIsLoading}
-                className="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-md font-semibold disabled:opacity-60 disabled:cursor-not-allowed transition duration-150 ease-in-out shadow-sm"
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-md font-semibold disabled:opacity-60 disabled:cursor-not-allowed transition duration-150 ease-in-out shadow-sm text-lg" 
               >
                 {workflowIsLoading ? (
                   <>
