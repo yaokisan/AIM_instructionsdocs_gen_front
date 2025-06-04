@@ -10,8 +10,8 @@
       "use": "@vercel/python",
       "config": {
         "includeFiles": [
-          "api/google_services.py",
-          "api/config.py"
+          "google_services.py",
+          "config.py"
         ]
       }
     }
