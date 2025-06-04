@@ -1,11 +1,5 @@
-# Step3-1　宿題パッケージstarterのサンプルアプリです
-
-## クローン
-git clone https://github.com/techzerocs/LinkFastAPINext_starter.git
-
-
 ## backend
-cd backend
+cd api
 
 python3 -m venv backend_env (backend_env という名前の仮想環境を作成)
 
