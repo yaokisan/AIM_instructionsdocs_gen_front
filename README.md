@@ -3,7 +3,7 @@
 ・特にbackendディレクトリではmainブランチではなくdev/local-fixesをデプロイした方のURLを、page.jsxで使用されるURLとして設定しているのでこんがらがらないよう注意が必要です。
 
 ## backend
-cd backend
+cd api
 
 python3 -m venv backend_env (backend_env という名前の仮想環境を作成)
 
