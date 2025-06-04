@@ -1,8 +1,6 @@
-# Step3-1　宿題パッケージstarterのサンプルアプリです
-
-## クローン
-git clone https://github.com/techzerocs/LinkFastAPINext_starter.git
-
+## 注意点
+・このアプリはfrontendディレクトリとbackendディレクトリを分けてvercelでデプロイしています。
+・特にbackendディレクトリではmainブランチではなくdev/local-fixesをデプロイした方のURLを、page.jsxで使用されるURLとして設定しているのでこんがらがらないよう注意が必要です。
 
 ## backend
 cd backend
