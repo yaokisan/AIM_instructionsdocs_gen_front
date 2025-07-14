@@ -37,7 +37,7 @@ export default function Home() {
     }
 
     try {
-      const response = await fetch('https://aim-instructionsdocs-6lrvrksmj.vercel.app/api/execute_workflow', {
+      const response = await fetch('https://aim-instructionsdocs-gen.vercel.app/api/execute_workflow', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

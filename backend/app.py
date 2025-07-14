@@ -125,6 +125,90 @@ def redirect_to_original(short_id: str):
 def get_all_urls():
     return {"urls": url_database}
 
+# --- デバッグ用エンドポイント ---
+@app.get("/api/test_auth")
+def test_auth():
+    """Google API認証をテストするエンドポイント"""
+    try:
+        from config import settings
+        import os
+        from google.auth.transport.requests import Request
+        from google.oauth2.credentials import Credentials
+        
+        # 環境変数の確認
+        client_id = settings.google_client_id or os.getenv("GOOGLE_CLIENT_ID")
+        client_secret = settings.google_client_secret or os.getenv("GOOGLE_CLIENT_SECRET")
+        refresh_token = settings.google_refresh_token or os.getenv("GOOGLE_REFRESH_TOKEN")
+        
+        debug_info = {
+            "client_id_set": bool(client_id),
+            "client_secret_set": bool(client_secret),
+            "refresh_token_set": bool(refresh_token),
+            "client_id_prefix": client_id[:20] + "..." if client_id else None,
+            "refresh_token_prefix": refresh_token[:20] + "..." if refresh_token else None,
+        }
+        
+        if not all([client_id, client_secret, refresh_token]):
+            return {
+                "status": "error",
+                "message": "環境変数が不足しています",
+                "debug": debug_info
+            }
+        
+        # 認証テスト
+        SCOPES = [
+            'https://www.googleapis.com/auth/gmail.readonly',
+            'https://www.googleapis.com/auth/drive',
+            'https://www.googleapis.com/auth/documents'
+        ]
+        
+        creds = Credentials.from_authorized_user_info(
+            info={
+                "refresh_token": refresh_token,
+                "client_id": client_id,
+                "client_secret": client_secret,
+                "token_uri": "https://oauth2.googleapis.com/token",
+            }, 
+            scopes=SCOPES
+        )
+        
+        debug_info["credentials_created"] = True
+        debug_info["credentials_valid"] = creds.valid
+        debug_info["credentials_expired"] = creds.expired
+        debug_info["has_refresh_token"] = bool(creds.refresh_token)
+        
+        # リフレッシュが必要な場合
+        if creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+            debug_info["refreshed"] = True
+        
+        if creds.valid:
+            # 実際にAPIテスト
+            from googleapiclient.discovery import build
+            service = build('gmail', 'v1', credentials=creds)
+            profile = service.users().getProfile(userId='me').execute()
+            
+            return {
+                "status": "success",
+                "message": "認証成功",
+                "email": profile.get('emailAddress'),
+                "debug": debug_info
+            }
+        else:
+            return {
+                "status": "error", 
+                "message": "認証失敗: 無効な認証情報",
+                "debug": debug_info
+            }
+            
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": f"認証テスト中にエラー: {str(e)}",
+            "error_type": type(e).__name__,
+            "debug": debug_info if 'debug_info' in locals() else {}
+        }
+
 # --- 新しいワークフロー用のコード --- 
 class WorkflowRequest(BaseModel):
     number_of_copies: int # STEP4で複製するドキュメントの数
